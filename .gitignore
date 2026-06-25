@@ -1,0 +1,25 @@
+# Environment files
+.env
+.env.*
+backend/.env
+
+# Python caching
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# User Uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Python Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+*.venv
+
+# OS files
+.DS_Store
+Thumbs.db
