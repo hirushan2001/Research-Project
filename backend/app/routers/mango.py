@@ -53,7 +53,7 @@ async def predict_mango(
     background_tasks.add_task(cleanup_temp_file, temp_filepath)
 
     try:
-        # Execute Roboflow workflow prediction
+        # Execute Roboflow serverless model inference
         result = predict_mango_grade(temp_filepath, filename=file.filename)
         return result
         

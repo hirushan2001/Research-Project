@@ -31,7 +31,12 @@ app.include_router(mango.router, prefix="/api")
 
 @app.get("/")
 def read_root():
-    has_api_key = bool(settings.ROBOFLOW_API_KEY and settings.ROBOFLOW_API_KEY != "your_roboflow_api_key_here")
+    # Robust validation to detect if a live Roboflow API key is set
+    has_api_key = bool(
+        settings.ROBOFLOW_API_KEY 
+        and settings.ROBOFLOW_API_KEY.strip() != "" 
+        and settings.ROBOFLOW_API_KEY != "your_roboflow_api_key_here"
+    )
     mock_mode = not HAS_INFERENCE_SDK or not has_api_key
     
     return {

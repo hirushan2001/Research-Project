@@ -95,15 +95,17 @@ def parse_roboflow_output(result: Any) -> Dict[str, Any]:
 def predict_mango_grade(image_path: str, filename: str = "") -> Dict[str, Any]:
     """
     Sends an image to the Roboflow Serverless Inference API via HTTP POST.
-    Raises exceptions on errors (no mock fallback).
+    Falls back to a simulated mock prediction if the Roboflow API key is
+    missing, empty, or set to the default placeholder.
     """
     start_time = time.time()
     
     # Check if API key is valid / set
-    has_api_key = settings.ROBOFLOW_API_KEY and settings.ROBOFLOW_API_KEY != "your_roboflow_api_key_here"
+    has_api_key = settings.ROBOFLOW_API_KEY and settings.ROBOFLOW_API_KEY.strip() != "" and settings.ROBOFLOW_API_KEY != "your_roboflow_api_key_here"
     
     if not has_api_key:
-        raise ValueError("Roboflow API Key is missing or default. Please configure a valid key in the .env file.")
+        logger.warning("Roboflow API Key is missing or default. Falling back to simulated mock prediction.")
+        return simulate_mock_prediction(start_time, filename or os.path.basename(image_path))
         
     logger.info(f"Encoding image to base64: {image_path}")
     with open(image_path, "rb") as image_file:
