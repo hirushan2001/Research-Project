@@ -16,7 +16,7 @@ export const MainLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#080B11] text-slate-100 selection:bg-emerald-500/30 selection:text-emerald-300">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#080B11] text-slate-800 dark:text-slate-100 selection:bg-emerald-500/30 selection:text-emerald-300 transition-colors duration-300">
       {/* Top Header Navigation */}
       <Navbar onToggleSidebar={toggleSidebar} />
 

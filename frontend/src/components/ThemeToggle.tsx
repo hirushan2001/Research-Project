@@ -1,80 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { Server, Wifi, WifiOff, Cpu } from 'lucide-react';
-import { checkHealth } from '../services/api';
+import React from 'react';
+import { Sun, Moon } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 export const ThemeToggle: React.FC = () => {
-  const [status, setStatus] = useState<'checking' | 'online' | 'offline'>('checking');
-  const [mockMode, setMockMode] = useState<boolean | null>(null);
-
-  const fetchStatus = async () => {
-    try {
-      const data = await checkHealth();
-      if (data.status === 'healthy') {
-        setStatus('online');
-        setMockMode(data.mock_mode);
-      } else {
-        setStatus('offline');
-      }
-    } catch (error) {
-      setStatus('offline');
-      setMockMode(null);
-    }
-  };
-
-  useEffect(() => {
-    fetchStatus();
-    // Poll connection status every 10 seconds
-    const interval = setInterval(fetchStatus, 10000);
-    return () => clearInterval(interval);
-  }, []);
-
-  if (status === 'checking') {
-    return (
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-800 bg-slate-900/40 text-slate-400 select-none animate-pulse-slow">
-        <Server className="w-3.5 h-3.5" />
-        <span className="text-[11px] font-semibold tracking-wider uppercase font-sans">Syncing...</span>
-      </div>
-    );
-  }
-
-  if (status === 'offline') {
-    return (
-      <div 
-        onClick={fetchStatus}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-rose-950/40 bg-rose-950/15 text-rose-400 cursor-pointer hover:bg-rose-950/25 transition-colors select-none"
-        title="FastAPI Server is not responding on port 8000. Click to retry."
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-        </span>
-        <WifiOff className="w-3.5 h-3.5" />
-        <span className="text-[11px] font-bold tracking-wider uppercase font-sans">API Offline</span>
-      </div>
-    );
-  }
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <div 
-      onClick={fetchStatus}
-      className={`flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border cursor-pointer select-none transition-all duration-300 ${
-        mockMode 
-          ? 'border-amber-500/25 bg-amber-500/5 text-amber-400 hover:bg-amber-500/10' 
-          : 'border-emerald-500/25 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10'
-      }`}
-      title={mockMode ? "Running in Simulated Mock Mode. Click to recheck." : "Running in Roboflow Live API Mode. Click to recheck."}
+    <button
+      onClick={toggleTheme}
+      className="p-2.5 rounded-full border border-slate-200/60 dark:border-slate-800/40 bg-white/80 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-850 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group"
+      aria-label="Toggle Theme"
+      title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
     >
-      <span className="relative flex h-2 w-2">
-        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${mockMode ? 'bg-amber-400' : 'bg-emerald-400'}`}></span>
-        <span className={`relative inline-flex rounded-full h-2 w-2 ${mockMode ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
-      </span>
-      <div className="flex items-center gap-1.5">
-        {mockMode ? <Cpu className="w-3.5 h-3.5" /> : <Wifi className="w-3.5 h-3.5" />}
-        <span className="text-[11px] font-bold tracking-wider uppercase font-sans">
-          {mockMode ? 'API Online (Mock)' : 'API Online (Live)'}
-        </span>
+      <div className="relative w-4.5 h-4.5 flex items-center justify-center">
+        {/* Sun Icon */}
+        <Sun className={`w-4.5 h-4.5 absolute transition-all duration-500 transform ${
+          theme === 'light' 
+            ? 'rotate-0 scale-100 opacity-100' 
+            : 'rotate-90 scale-0 opacity-0'
+        }`} />
+        
+        {/* Moon Icon */}
+        <Moon className={`w-4.5 h-4.5 absolute transition-all duration-500 transform ${
+          theme === 'dark' 
+            ? 'rotate-0 scale-100 opacity-100' 
+            : '-rotate-90 scale-0 opacity-0'
+        }`} />
       </div>
-    </div>
+    </button>
   );
 };
 

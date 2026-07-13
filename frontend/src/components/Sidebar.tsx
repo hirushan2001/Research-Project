@@ -135,7 +135,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-slate-100 dark:border-slate-900">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <span>Module Version 1.0</span>
             <span className="flex items-center gap-1">
               <Globe className="w-3.5 h-3.5" />

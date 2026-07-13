@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu, GraduationCap } from 'lucide-react';
+import ApiStatus from './ApiStatus';
 import ThemeToggle from './ThemeToggle';
 
 interface NavbarProps {
@@ -27,20 +28,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
               <h1 className="text-base sm:text-lg font-bold bg-gradient-to-r from-emerald-600 to-lime-500 bg-clip-text text-transparent p-0 m-0 leading-tight">
                 FQAS
               </h1>
-              <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium tracking-wide leading-none uppercase hidden sm:inline">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wide leading-none uppercase hidden sm:inline">
                 Fruit Quality Assessment
               </span>
             </div>
           </div>
         </div>
 
-        {/* Right section: Info Badge & Theme Toggle */}
-        <div className="flex items-center gap-4">
+        {/* Right section: Info Badge, API Status, & Theme Toggle */}
+        <div className="flex items-center gap-3">
           <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 text-slate-600 dark:text-slate-400">
             <GraduationCap className="w-4 h-4 text-emerald-500" />
             <span className="text-xs font-medium font-sans">Research Project Stage</span>
           </div>
 
+          <ApiStatus />
           <ThemeToggle />
         </div>
 

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-outfit: "Outfit", system-ui, -apple-system, sans-serif;
   --font-sans: "Plus Jakarta Sans", "Outfit", system-ui, -apple-system, sans-serif;
@@ -51,16 +53,26 @@
 
 /* Glassmorphism classes */
 .glass-panel {
-  background: rgba(13, 19, 33, 0.75);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .glass-panel {
+  background: rgba(13, 19, 33, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .glass-card {
-  background: rgba(21, 30, 48, 0.45);
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.dark .glass-card {
+  background: rgba(21, 30, 48, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
