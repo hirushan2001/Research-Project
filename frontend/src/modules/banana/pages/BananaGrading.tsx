@@ -1,55 +1,36 @@
 import React, { useState } from 'react';
-import { useApp } from '../../context/AppContext';
-import { predictMango } from '../../services/api';
-import UploadZone from '../../components/UploadZone';
-import ImagePreview from '../../components/ImagePreview';
-import PredictionCard from '../../components/PredictionCard';
-import PredictionHistory from '../../components/PredictionHistory';
-import FutureFeatureCard from '../../components/FutureFeatureCard';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import type { FutureFeature, Prediction } from '../../types';
+import { useApp } from '../../../context/AppContext';
+import { predictBanana } from '../api';
+import UploadZone from '../../../components/UploadZone';
+import ImagePreview from '../../../components/ImagePreview';
+import PredictionCard from '../../../components/PredictionCard';
+import PredictionHistory from '../../../components/PredictionHistory';
+import FutureFeatureCard from '../../../components/FutureFeatureCard';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import type { FutureFeature, Prediction } from '../../../types';
 import { Info, AlertTriangle } from 'lucide-react';
 
 const FUTURE_FEATURES: FutureFeature[] = [
   {
     id: 'feat-1',
-    title: 'Defect Segmentation',
-    description: 'Pixel-level segmentation of anthracnose, black spots, and mechanical wounds to isolate defect zones.',
-    icon: 'eye'
-  },
-  {
-    id: 'feat-2',
-    title: 'Defect Percentage',
-    description: 'Calculate relative ratio of damaged surface area to refine quality grading threshold boundaries.',
+    title: 'Ripeness Indexing',
+    description: 'Track peel color transitions from green to bright yellow and brown sugar spots.',
     icon: 'sparkles'
   },
   {
-    id: 'feat-3',
-    title: 'Size Estimation',
-    description: 'Estimate spatial boundaries, width, and dimensional sizing categories against reference standards.',
-    icon: 'ruler'
-  },
-  {
-    id: 'feat-4',
-    title: 'Weight Prediction',
-    description: 'Apply volumetric density regression models to predict weight ranges from single camera viewpoints.',
-    icon: 'scale'
-  },
-  {
-    id: 'feat-5',
-    title: 'Explainable Grading Engine',
-    description: 'Provide saliency heatmaps highlighting surface regions influencing the YOLO classification decisions.',
-    icon: 'cpu'
+    id: 'feat-2',
+    title: 'Bruise Extraction',
+    description: 'Identify mechanical bruising and skin splits caused by transport/handling impact.',
+    icon: 'eye'
   }
 ];
 
-export const MangoGrading: React.FC = () => {
+export const BananaGrading: React.FC = () => {
   const { addPrediction } = useApp();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  // Track active prediction result
   const [prediction, setPrediction] = useState<{
     grade: 'G1' | 'G2' | 'G3' | 'G4';
     confidence: number;
@@ -77,10 +58,8 @@ export const MangoGrading: React.FC = () => {
     setError(null);
 
     try {
-      // Execute backend API
-      const result = await predictMango(selectedFile);
+      const result = await predictBanana(selectedFile);
       
-      // Read file to save as base64 in history
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64Image = reader.result as string;
@@ -93,7 +72,6 @@ export const MangoGrading: React.FC = () => {
           imageUrl: base64Image
         };
         
-        // Save to active state and context history
         setPrediction(newPred);
         addPrediction(newPred);
       };
@@ -104,16 +82,15 @@ export const MangoGrading: React.FC = () => {
       console.error(err);
       setError(
         err.response?.data?.detail || 
-        'Failed to connect to the backend server. Please verify the FastAPI application is running on port 8000.'
+        'Failed to connect to the banana backend services. Please verify the FastAPI application is running.'
       );
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Allow selecting past prediction to view details
   const handleSelectHistoryRecord = (record: Prediction) => {
-    setSelectedFile(null); // Clear active file
+    setSelectedFile(null);
     setPrediction({
       grade: record.grade,
       confidence: record.confidence,
@@ -130,13 +107,13 @@ export const MangoGrading: React.FC = () => {
       {/* Module Title Header */}
       <section className="space-y-2">
         <div className="flex items-center gap-2">
-          <span className="text-3xl">🍋</span>
+          <span className="text-3xl">🍌</span>
           <h2 className="text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-white">
-            Mango Quality Grading
+            Banana Quality Assessment
           </h2>
         </div>
-        <p className="text-sm text-slate-500 dark:text-slate-400 font-sans max-w-2xl leading-relaxed">
-          Upload a clear photograph of a mango specimen. The trained YOLO classification model will analyze shape, skin patches, and coloration parameters, outputting a graded quality report (G1 - G4).
+        <p className="text-sm text-slate-550 dark:text-slate-400 font-sans max-w-2xl leading-relaxed">
+          Upload a clear photograph of a banana specimen. The model will analyze ripeness color profiles, spots, and surface bruising, outputting a graded quality report (G1 - G4).
         </p>
       </section>
 
@@ -210,14 +187,14 @@ export const MangoGrading: React.FC = () => {
             />
           ) : (
             <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/45 bg-white/40 dark:bg-slate-900/10 glass-panel">
-              <div className="p-4 mb-4 rounded-full bg-slate-100 dark:bg-slate-950/60 border border-slate-200/50 dark:border-slate-800/40 text-slate-400 dark:text-slate-600 animate-float">
+              <div className="p-4 mb-4 rounded-full bg-slate-100 dark:bg-slate-950/60 border border-slate-200/50 dark:border-slate-800/40 text-slate-400 dark:text-slate-650 animate-float">
                 <Info className="w-8 h-8" />
               </div>
               <h4 className="text-sm font-bold text-slate-700 dark:text-slate-300">
                 Awaiting Specimen Analysis
               </h4>
-              <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500 max-w-[280px]">
-                Please upload an image file of a mango specimen and trigger the grading analysis model to view results.
+              <p className="mt-1.5 text-xs text-slate-450 dark:text-slate-550 max-w-[280px]">
+                Please upload an image file of a banana specimen and trigger the grading analysis model to view results.
               </p>
             </div>
           )}
@@ -230,7 +207,7 @@ export const MangoGrading: React.FC = () => {
         <PredictionHistory onSelectRecord={handleSelectHistoryRecord} />
       </section>
 
-      {/* Future roadmap enhancements (Locked capabilities) */}
+      {/* Future enhancements */}
       <section className="space-y-5 pt-4 border-t border-slate-200/40 dark:border-slate-800/35">
         <div>
           <h3 className="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
@@ -253,4 +230,4 @@ export const MangoGrading: React.FC = () => {
   );
 };
 
-export default MangoGrading;
+export default BananaGrading;

@@ -1,19 +1,16 @@
+import os
 import time
 import random
 import logging
 import json
+import base64
+import requests
 from typing import Dict, Any
 from app.core.config import settings
 
 logger = logging.getLogger("mango-grading")
-logging.basicConfig(level=logging.INFO)
 
-import base64
-import requests
-
-# We run a custom HTTP workflow client that supports Python 3.13+ directly without inference-sdk
 HAS_INFERENCE_SDK = True
-logger.info("Roboflow HTTP client loaded successfully.")
 
 GRADE_MESSAGES = {
     "G1": "Excellent Quality (Premium quality, no visible spots or defects)",
@@ -101,17 +98,22 @@ def predict_mango_grade(image_path: str, filename: str = "") -> Dict[str, Any]:
     start_time = time.time()
     
     # Check if API key is valid / set
-    has_api_key = settings.ROBOFLOW_API_KEY and settings.ROBOFLOW_API_KEY.strip() != "" and settings.ROBOFLOW_API_KEY != "your_roboflow_api_key_here"
+    has_api_key = (
+        settings.MANGO_ROBOFLOW_API_KEY 
+        and settings.MANGO_ROBOFLOW_API_KEY.strip() != "" 
+        and settings.MANGO_ROBOFLOW_API_KEY != "your_mango_api_key_here"
+        and settings.MANGO_ROBOFLOW_API_KEY != "your_roboflow_api_key_here"
+    )
     
     if not has_api_key:
-        logger.warning("Roboflow API Key is missing or default. Falling back to simulated mock prediction.")
+        logger.warning("Mango Roboflow API Key is missing or default. Falling back to simulated mock prediction.")
         return simulate_mock_prediction(start_time, filename or os.path.basename(image_path))
         
     logger.info(f"Encoding image to base64: {image_path}")
     with open(image_path, "rb") as image_file:
         base64_data = base64.b64encode(image_file.read()).decode("ascii")
 
-    url = f"https://serverless.roboflow.com/mango-grading-system/1?api_key={settings.ROBOFLOW_API_KEY}"
+    url = f"https://serverless.roboflow.com/mango-grading-system/1?api_key={settings.MANGO_ROBOFLOW_API_KEY}"
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
     logger.info("Calling Roboflow Serverless Inference API (mango-grading-system/1)...")

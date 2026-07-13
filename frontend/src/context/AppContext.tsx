@@ -23,7 +23,7 @@ const INITIAL_MODULES: FruitModule[] = [
     id: 'guava',
     name: 'Guava Quality Assessment',
     icon: '🍐',
-    status: 'coming-soon',
+    status: 'active',
     route: '/guava',
     description: 'Detect blemishes, size discrepancies, and freshness parameters in common Guava varieties.'
   },
@@ -31,7 +31,7 @@ const INITIAL_MODULES: FruitModule[] = [
     id: 'banana',
     name: 'Banana Quality Assessment',
     icon: '🍌',
-    status: 'coming-soon',
+    status: 'active',
     route: '/banana',
     description: 'Grade bananas by ripeness indexing, spot percentage coverage, and bruising markers.'
   },
@@ -39,7 +39,7 @@ const INITIAL_MODULES: FruitModule[] = [
     id: 'papaya',
     name: 'Papaya Quality Assessment',
     icon: '🍈',
-    status: 'coming-soon',
+    status: 'active',
     route: '/papaya',
     description: 'Determine ripeness zones and disease spot density measurements on Hawaiian and Solo papayas.'
   }
